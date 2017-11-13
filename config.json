@@ -9,10 +9,7 @@
 	"minpayout": 1.0,
 	"secret": "SECRET",
 	"secondsecret": "SECRET2",
-    "donations": {
-		
-    },
-    "donationspercentage": {"": 
-    },
+	"donations": {},
+	"donationspercentage": {},
 	"skip": []
 }
