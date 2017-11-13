@@ -34,6 +34,9 @@ if 'logfile' in conf:
 else:
 	LOGFILE = 'poollogs.json'
 
+fees = 0.0
+if 'feededuct' in conf and conf['feededuct']:
+	fees = 0.1
 
 # Override minpayout from command line arg
 if args.minpayout != None:
@@ -66,7 +69,7 @@ def saveLog (log):
 
 
 def estimatePayouts (log):
-	if conf['coin'].lower () == 'ark':
+	if conf['coin'].lower () == 'ark' or conf['coin'].lower () == 'kapu' :
 		uri = conf['node'] + '/api/delegates/forging/getForgedByAccount?generatorPublicKey=' + conf['pubkey']
 		d = requests.get (uri)
 		lf = log['lastforged']
@@ -111,10 +114,6 @@ def pool ():
 	log = loadLog ()
 	
 	(topay, log, forged) = estimatePayouts (log)
-	
-	if len (topay) == 0:
-		print ('Nothing to distribute, exiting...')
-		return
 		
 	f = open ('payments.sh', 'w')
 	for x in topay:
@@ -128,7 +127,7 @@ def pool ():
 			pending = log['accounts'][x['address']]['pending']
 			
 		# If below minpayout, put in the accoutns pending and skip
-		if (x['balance'] + pending) < conf['minpayout'] and x['balance'] > 0.0:
+		if (x['balance'] + pending - fees) < conf['minpayout'] and x['balance'] > 0.0:
 			log['accounts'][x['address']]['pending'] += x['balance']
 			continue
 			
@@ -138,9 +137,9 @@ def pool ():
 			log['accounts'][x['address']]['pending'] = 0
 		
 
-		f.write ('echo Sending ' + str (x['balance']) + ' \(+' + str (pending) + ' pending\) to ' + x['address'] + '\n')
+		f.write ('echo Sending ' + str (x['balance'] - fees) + ' \(+' + str (pending) + ' pending\) to ' + x['address'] + '\n')
 		
-		data = { "secret": conf['secret'], "amount": int ((x['balance'] + pending) * 100000000), "recipientId": x['address'] }
+		data = { "secret": conf['secret'], "amount": int ((x['balance'] + pending - fees) * 100000000), "recipientId": x['address'] }
 		if conf['secondsecret'] != None:
 			data['secondSecret'] = conf['secondsecret']
 		
@@ -150,10 +149,10 @@ def pool ():
 	# Handle pending balances
 	for y in log['accounts']:
 		# If the pending is above the minpayout, create the payout line
-		if log['accounts'][y]['pending'] > conf['minpayout']:
+		if log['accounts'][y]['pending'] - fees > conf['minpayout']:
 			f.write ('echo Sending pending ' + str (log['accounts'][y]['pending']) + ' to ' + y + '\n')
 			
-			data = { "secret": conf['secret'], "amount": int (log['accounts'][y]['pending'] * 100000000), "recipientId": y }
+			data = { "secret": conf['secret'], "amount": int ((log['accounts'][y]['pending'] - fees) * 100000000), "recipientId": y }
 			if conf['secondsecret'] != None:
 				data['secondSecret'] = conf['secondsecret']
 			
