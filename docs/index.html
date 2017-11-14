@@ -1,18 +1,35 @@
 <html>
     <head>
-        <title>Steel Pool</title>
+        <title>Steel Oxy Delegate</title>
 		<link rel="icon" type="image/png" href="favicon.png" />
         <link href="https://bootswatch.com/3/flatly/bootstrap.min.css" rel="stylesheet">
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
         <script src="app.js"></script>
+		<style>
+			body {
+				background: url(concrete.jpg) left top repeat;
+			}
+			a{
+				color: #0E1DA0;
+			}
+			table{
+				background-color: white;
+			}
+			div.alert{
+				border-color: black;
+			}
+		</style>
     </head>
     <body ng-app="delegateApp" ng-controller="indexCtrl">
         <div class="container">
             <h1>Steel Pool (<a href="https://explorer.oxycoin.io/address/7124013106717692594X" target="_blank">Explorer</a>)</h1>
-            <div class="alert alert-info" role="alert"><h2>For the next 6 months Steel will share 95% of the forged amount to the voters</h2>
-			After that it will most likely be changed to 90%, but it will depend on how OXY develops. Will keep you posted here.</p>
-			<p>yes</p>
+            <div class="alert alert-info" role="alert"><h3>For the next 2 months Steel will share 95% of the forged amount to the voters</h3>
+			If Steel becomes an active delegate before Christmas, the 95% period will be extended by another 2 months.<br />
+			After that it will most likely be changed to 85%, but it will depend on how OXY develops. Will keep you posted here!</p>
+			<p>&nbsp;</p>
+			<p>The node is running on an Ubunto VM in Azure.</p>
+			<p>The minimum payout is 1 OXY and fee deduction is enabled.</p>
 			</div>
 
             <div class="row">
@@ -26,13 +43,13 @@
 
             <div class="row">
                 <div class="col-md-4">
-                    <div class="alert alert-info" role="alert">Rank: {{delegate.rank}}</div>
+                    <div class="alert alert-success" role="alert">Rank: {{delegate.rank}}</div>
                 </div>
                 <div class="col-md-4">
-                    <div class="alert alert-danger" role="alert">Productivity: {{delegate.productivity}}</div>
+                    <div class="alert alert-success" role="alert">Productivity: {{delegate.productivity}}</div>
                 </div>
                 <div class="col-md-4">
-                    <div class="alert alert-warning" role="alert">Approval: {{delegate.approval}}</div>
+                    <div class="alert alert-success" role="alert">Approval: {{delegate.approval}}</div>
                 </div>
             </div>
 
@@ -55,8 +72,8 @@
             
             <hr>
             <div align="center">
-	            This software is free software created by Davide Gessa<br>
-	            <a href="https://github.com/dakk/lisk-pool">Fork me on Github</a>
+	            This software is based on the free software created by Davide Gessa<br>
+	            <a href="https://github.com/dakk/lisk-pool">Fork it on Github</a>
 	        </div>
         </div>
     </body>
